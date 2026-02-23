@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Batch #{{ batch.id }}: {{ batch.description }}</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th style="width: 15%;">Brand</th>
+            <th style="width: 25%;">Model</th>
+            <th style="width: 20%;">Serial</th>
+            <th style="width: 15%;">Purchase Price</th>
+            <th style="width: 15%;">Profit (Fix/%)</th>
+            <th style="width: 10%;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="background: #fafafa; border-bottom: 2px solid #eee;">
+            <form action="/save-inventory" method="post">
+                <input type="hidden" name="batch_pk" value="{{ batch.id }}">
+                <td><input type="text" name="brand" class="table-input" placeholder="e.g. Dell" required autofocus></td>
+                <td><input type="text" name="model" class="table-input" placeholder="e.g. XPS 13" required></td>
+                <td><input type="text" name="serial" class="table-input" placeholder="SN-..." required></td>
+                <td><input type="number" step="0.01" name="purchase_price" class="table-input" placeholder="0.00" required></td>
+                <td><input type="text" name="profit" class="table-input" placeholder="5000 or 15%" required></td>
+                <td><button type="submit" class="btn-small">Add</button></td>
+            </form>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ item.brand }}</td>
+            <td>{{ item.model }}</td>
+            <td><code>{{ item.serial }}</code></td>
+            <td>₹{{ item.purchase_price }}</td>
+            <td>{{ item.intended_profit }}</td>
+            <td><small>In-Stock</small></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><a href="/batch">← Back to Batch List</a></p>
+{% endblock %}

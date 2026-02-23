@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .batch-header { background: #eef; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; gap: 20px; }
+    .item-row { display: flex; gap: 10px; flex-wrap: wrap; background: #fff; border: 1px solid #ddd; padding: 15px; }
+    .item-row div { display: flex; flex-direction: column; }
+    input, select { width: 140px; }
+    .desc-input { width: 300px; }
+</style>
+
+<h1>📦 Bulk Purchase Entry (Method B)</h1>
+
+<form action="/add-batch-item" method="post">
+    <div class="batch-header">
+        <div><label>Batch ID</label><input type="text" name="batch_id" placeholder="JAN-LOT-01" required></div>
+        <div><label>Batch Total Expenses</label><input type="number" name="total_batch_expenses" placeholder="e.g. 2000" required></div>
+        <div><label>Total Purchase Value</label><input type="number" name="total_batch_purchase_value" placeholder="Sum of all items" required></div>
+    </div>
+
+    <div class="item-row">
+        <div><label>Brand</label><input type="text" name="brand" required></div>
+        <div><label>Model</label><input type="text" name="model" required></div>
+        <div><label>Serial #</label><input type="text" name="serial" required></div>
+        <div><label>Ecommerce Description</label><input type="text" name="description" class="desc-input"></div>
+        <div><label>Purchase Price</label><input type="number" name="purchase_price" required></div>
+        <div>
+            <label>Profit Type</label>
+            <select name="profit_type">
+                <option value="percentage">% Percentage</option>
+                <option value="fixed">Fixed INR</option>
+            </select>
+        </div>
+        <div><label>Profit Value</label><input type="number" name="profit_value" required></div>
+        
+        <div style="justify-content: flex-end;">
+            <button type="submit">Add Item & Next Row</button>
+        </div>
+    </div>
+</form>
+
+<hr>
+<p><a href="/">← Back to Dashboard</a></p>
+{% endblock %}

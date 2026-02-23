@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecomsense Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <style>
+        /* Table Layouts */
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th, td { border-bottom: 1px solid #e1e1e1; padding: 10px; text-align: left; }
+        
+        /* Ghost Inputs for Inline Entry */
+        .table-input {
+            width: 100%; background: transparent; border: none; outline: none;
+            padding: 0; margin: 0; font-family: inherit; font-size: inherit;
+        }
+        .table-input:focus { background: #fff8e1; }
+        
+        /* Horizontal Item Entry Form */
+        .horizontal-row { 
+            display: flex; gap: 8px; background: #f9f9f9; padding: 15px; 
+            border: 1px solid #ddd; border-radius: 5px; align-items: flex-end; 
+        }
+        .horizontal-row div { display: flex; flex-direction: column; }
+        .horizontal-row label { font-size: 0.7rem; font-weight: bold; margin-bottom: 2px; }
+        .horizontal-row input { padding: 5px; width: 120px; }
+        
+        /* Helpers */
+        .desc-box { width: 200px !important; }
+        .btn-small { padding: 4px 12px; cursor: pointer; background: #eee; border: 1px solid #ccc; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<nav style="display: flex; align-items: center; padding: 10px; background: #333; color: white;">
+    <div style="display: flex; gap: 20px;">
+        <a href="/" style="color: white; text-decoration: none;">🏠 Dashboard</a>
+        <a href="/batch" style="color: white; text-decoration: none;">📦 Batches</a>
+        <a href="/all-items" style="color: white; text-decoration: none;">💻 Items</a>
+    </div>
+    
+    <div style="margin-left: auto; display: flex; gap: 20px;">
+        <a href="/assets-list" style="color: #ffca28; text-decoration: none; font-weight: bold;">🛠️ Assets</a>
+    </div>
+</nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
