@@ -1,28 +1,26 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
-    <h2>Edit Item: {{ item.brand }} {{ item.model }}</h2>
-    <p style="color: #666;">Serial: <code>{{ item.serial }}</code> | Batch ID: {{ item.batch_id }}</p>
+<div class="page-header-compact">
+    <h3 class="title-small">{{ item.brand }} {{ item.model }}: {{ item.serial }} ({{ item.batch_id }})</h3>
 
     <form action="/update-item" method="post" enctype="multipart/form-data">
         <input type="hidden" name="item_id" value="{{ item.inventory_id }}">
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-            <section style="background: #fdffdf; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0;">
-                <h3 style="margin-top: 0;">Technical Details</h3>
-                
-                <label style="display: block; margin-bottom: 5px;">Brand</label>
-                <input type="text" name="brand" value="{{ item.brand }}" style="width: 100%; margin-bottom: 15px;" required>
-                
-                <label style="display: block; margin-bottom: 5px;">Model</label>
-                <input type="text" name="model" value="{{ item.model }}" style="width: 100%; margin-bottom: 15px;" required>
-                
-                <label style="display: block; margin-bottom: 5px;">Serial Number</label>
-                <input type="text" name="serial" value="{{ item.serial }}" style="width: 100%; margin-bottom: 15px;" required>
-                
-                <label style="display: block; margin-bottom: 5px;">Current Status</label>
-                <select name="status" style="width: 100%; padding: 8px;">
+
+        <div class="dashboard-grid">
+            <section class="card card-yellow">
+                <h4 class="section-title">Technical Details</h4>
+
+                <label class="field-label">Brand</label>
+                <input type="text" name="brand" value="{{ item.brand }}" class="table-input border-bottom" required>
+
+                <label class="field-label">Model</label>
+                <input type="text" name="model" value="{{ item.model }}" class="table-input border-bottom" required>
+
+                <label class="field-label">Serial Number</label>
+                <input type="text" name="serial" value="{{ item.serial }}" class="table-input border-bottom" required>
+
+                <label class="field-label">Status</label>
+                <select name="status" class="select-input">
                     <option value="In-Stock" {% if item.status == 'In-Stock' %}selected{% endif %}>In-Stock</option>
                     <option value="Servicing" {% if item.status == 'Servicing' %}selected{% endif %}>Servicing</option>
                     <option value="Ready" {% if item.status == 'Ready' %}selected{% endif %}>Ready</option>
@@ -30,87 +28,56 @@
                 </select>
             </section>
 
-            <section style="background: #f4f7f6; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0;">
-                <h3 style="margin-top: 0;">Pricing Info</h3>
-                
-                <label style="display: block; margin-bottom: 5px;">Purchase Price (₹)</label>
-                <input type="number" step="0.01" id="purchase_price" name="purchase_price" value="{{ item.purchase_price }}" style="width: 100%; margin-bottom: 15px;" required>
-                
-                <label style="display: block; margin-bottom: 5px;">Total Expenses (₹)</label>
-                <input type="number" step="0.01" id="total_expenses" name="total_expenses" value="{{ item.total_expenses }}" style="width: 100%; margin-bottom: 15px;" required>
+            <section class="card card-blue">
+                <h4 class="section-title">Pricing Info</h4>
 
-                <label style="display: block; margin-bottom: 5px;">Intended Profit (Fixed or %)</label>
-                <input type="text" id="profit" name="profit" value="{{ item.intended_profit }}" style="width: 100%; margin-bottom: 15px;" required>
-                
-                <div style="background: #eef; padding: 15px; border-radius: 5px; border: 1px solid #ccd;">
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Final Selling Price (Override if needed)</label>
-                    <input type="number" step="0.01" id="selling_price" name="selling_price" value="{{ suggested_price }}" style="width: 100%; font-size: 1.1rem; font-weight: bold; color: #2e7d32;" required>
-                    <button type="button" onclick="runCalculation()" style="margin-top: 10px; background: #2196F3; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">
-                        Calculate Suggested
-                    </button>
+                <label class="field-label">Purchase Price (₹)</label>
+                <input type="number" step="0.01" id="purchase_price" name="purchase_price" value="{{ item.purchase_price }}" class="table-input border-bottom" required>
+
+                <label class="field-label">Expenses (₹)</label>
+                <input type="number" step="0.01" id="total_expenses" name="total_expenses" value="{{ item.total_expenses }}" class="table-input border-bottom" required>
+
+                <label class="field-label">Intended Profit (Fix/%)</label>
+                <input type="text" id="profit" name="profit" value="{{ item.intended_profit }}" class="table-input border-bottom" required>
+
+                <div class="calc-box">
+                    <label class="bold-label">Final Selling Price</label>
+                    <input type="number" step="0.01" id="selling_price" name="selling_price" value="{{ item.selling_price }}" class="table-input price-focus" required>
+                    <button type="button" onclick="runCalculation()" class="btn-calc">Calculate</button>
                 </div>
             </section>
         </div>
 
-        <section style="margin-top: 30px;">
-            <h3>Ecommerce Description</h3>
-            <textarea name="description" rows="5" style="width: 100%; padding: 10px;" placeholder="Enter product specifications, RAM, SSD details, or condition notes...">{{ item.description_for_ecommerce or '' }}</textarea>
-        </section>
-
-        <hr style="margin: 40px 0;">
-
-        <section>
-            <h3>Product Gallery</h3>
-            
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px;">
+        <section class="gallery-section">
+            <h4 class="section-title">Product Gallery</h4>
+            <div class="image-grid">
                 {% if photos %}
                     {% for photo_name in photos %}
-                    <div style="width: 160px; border: 1px solid #ddd; padding: 8px; border-radius: 6px; background: white; text-align: center;">
-                        <img src="/static/inventory_photos/{{ item.inventory_id }}/{{ photo_name }}" 
-                             style="width: 100%; height: 120px; object-fit: cover; display: block; border-radius: 4px; margin-bottom: 8px;">
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.8rem; color: #666;">{{ photo_name }}</span>
-                            <button type="submit" formaction="/delete-photo/{{ item.inventory_id }}/{{ photo_name }}" 
-                                    style="background: #ff5252; color: white; border: none; padding: 3px 7px; border-radius: 3px; cursor: pointer; font-size: 0.7rem;">
-                                Delete
-                            </button>
-                        </div>
+                    <div class="image-card">
+                        <img src="/static/inventory_photos/{{ item.inventory_id }}/{{ photo_name }}" class="preview-img">
+                        <button type="submit" formaction="/delete-photo/{{ item.inventory_id }}/{{ photo_name }}" class="badge status-sold delete-btn">Delete</button>
                     </div>
                     {% endfor %}
-                {% else %}
-                    <p style="color: #999;">No photos found in filesystem for this item.</p>
                 {% endif %}
             </div>
-
-            <div style="background: #fffbe6; padding: 25px; border: 2px dashed #ffd54f; border-radius: 8px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Add New Photos (Select Multiple)</label>
-                <input type="file" name="photos" accept="image/*" multiple style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
-                <p style="font-size: 0.85rem; color: #856404; margin-top: 10px;">
-                    Tip: Use Ctrl (Windows) or Cmd (Mac) to select multiple images. They will be auto-numbered.
-                </p>
+            <div class="upload-zone">
+                <label class="bold-label">Add Photos (Multiple)</label>
+                <input type="file" name="photos" accept="image/*" multiple>
             </div>
         </section>
 
-        <div style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #eee; display: flex; align-items: center; gap: 20px;">
-            <button type="submit" style="background: #2e7d32; color: white; border: none; padding: 12px 40px; border-radius: 5px; font-size: 1rem; cursor: pointer; font-weight: bold;">
-                Save All Changes
-            </button>
-            <a href="/add-items/{{ item.batch_id }}" style="text-decoration: none; color: #666; font-weight: bold;">Cancel & Go Back</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="/add-items/{{ item.batch_id }}" class="action-link">Cancel</a>
         </div>
     </form>
 </div>
 
 <script>
-/**
- * Local calculation to update the selling_price field without 
- * hitting the database yet.
- */
 function runCalculation() {
     const pp = parseFloat(document.getElementById('purchase_price').value) || 0;
     const exp = parseFloat(document.getElementById('total_expenses').value) || 0;
     const profitStr = document.getElementById('profit').value.trim();
-    
     let calcProfit = 0;
     if (profitStr.endsWith('%')) {
         let percent = parseFloat(profitStr.replace('%', '')) / 100;
@@ -118,7 +85,6 @@ function runCalculation() {
     } else {
         calcProfit = parseFloat(profitStr) || 0;
     }
-    
     const finalPrice = pp + exp + calcProfit;
     document.getElementById('selling_price').value = finalPrice.toFixed(2);
 }

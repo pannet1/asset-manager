@@ -1,56 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h2>Global Inventory Listing</h2>
-    <span style="background: #eee; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">
-        Total: {{ items|length }} Units
-    </span>
-</div>
+<div class="page-header-compact">
+    <h3 class="title-small">💻 Global Inventory ({{ items|length }})</h3>
 
-<table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-    <thead>
-        <tr style="background: #f8f9fa; text-align: left; border-bottom: 2px solid #dee2e6;">
-            <th style="padding: 12px;">ID</th>
-            <th style="padding: 12px;">Brand/Model</th>
-            <th style="padding: 12px;">Serial</th>
-            <th style="padding: 12px;">Batch</th>
-            <th style="padding: 12px;">Selling Price</th>
-            <th style="padding: 12px;">Status</th>
-            <th style="padding: 12px;">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in items %}
-        <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 12px; color: #666;">#{{ item.inventory_id }}</td>
-            <td style="padding: 12px;"><strong>{{ item.brand }}</strong> {{ item.model }}</td>
-            <td style="padding: 12px;"><code>{{ item.serial }}</code></td>
-            <td style="padding: 12px;">
-                <a href="/add-items/{{ item.batch_id }}" style="text-decoration: none; color: #007bff;">
-                    Batch #{{ item.batch_id }}
-                </a>
-            </td>
-            <td style="padding: 12px; font-weight: bold; color: #28a745;">
-                ₹{{ item.selling_price or 'Not Set' }}
-            </td>
-            <td style="padding: 12px;">
-                {% set status_color = '#6c757d' %}
-                {% if item.status == 'In-Stock' %}{% set status_color = '#007bff' %}
-                {% elif item.status == 'Ready' %}{% set status_color = '#28a745' %}
-                {% elif item.status == 'Servicing' %}{% set status_color = '#ffc107' %}
-                {% elif item.status == 'Sold' %}{% set status_color = '#dc3545' %}
-                {% endif %}
-                <span style="background: {{ status_color }}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
-                    {{ item.status }}
-                </span>
-            </td>
-            <td style="padding: 12px;">
-                <a href="/edit-item/{{ item.inventory_id }}" style="background: #333; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem;">
-                    Edit / Photos
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 8%;">ID</th>
+                <th style="width: 25%;">Brand/Model</th>
+                <th style="width: 15%;">Serial</th>
+                <th style="width: 12%;">Batch</th>
+                <th style="width: 15%;">Selling Price</th>
+                <th style="width: 15%;">Status</th>
+                <th style="width: 10%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="text-muted">#{{ item.inventory_id }}</td>
+                <td><strong>{{ item.brand }}</strong> {{ item.model }}</td>
+                <td><code>{{ item.serial }}</code></td>
+                <td>
+                    <a href="/add-items/{{ item.batch_id }}" class="subtle-link">
+                        #{{ item.batch_id }}
+                    </a>
+                </td>
+                <td class="price-text">₹{{ item.selling_price or '0.00' }}</td>
+                <td>
+                    <span class="badge status-{{ item.status.lower() }}">
+                        {{ item.status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="/edit-item/{{ item.inventory_id }}" class="action-link-blue">
+                        Edit →
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
