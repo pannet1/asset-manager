@@ -1,24 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ecomsense Manager</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-    <link rel="stylesheet" href="/static/styles.css?v=1.3">
-</head>
-<body>
-    <nav>
-        <div class="nav-links">
-            <a href="/">🏠 Dashboard</a>
-            <a href="/batch">📦 Batches</a>
-            <a href="/all-items">💻 Items</a>
-        </div>
-        <div class="nav-right">
-            <a href="/assets-list">🛠️ Assets</a>
-        </div>
-    </nav>
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ecomsense Manager</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+        />
+        <link rel="stylesheet" href="/static/styles.css?v=1.3" />
+    </head>
+    <body>
+        <nav>
+            <div class="nav-links">
+                <a href="/">🏠 Dashboard</a>
+                <a href="/batch">📦 Batches</a>
+                <a href="/all-items">💻 Items</a>
+                <a href="/sales">💰 Sales</a>
+            </div>
+            <div class="nav-right">
+                <a href="/ledger" style="color: #ffca28; margin-right: 15px"
+                    >🧾 Ledger</a
+                >
+                <a href="/assets-list">🛠️ Assets</a>
+            </div>
+        </nav>
+        <main class="container">{% block content %}{% endblock %}</main>
+    </body>
 </html>
